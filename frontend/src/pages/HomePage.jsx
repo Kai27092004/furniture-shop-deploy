@@ -1,30 +1,80 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from "framer-motion";
-import { fetchCategories, BACKEND_URL } from '../services/api';
+import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from '../context/ToastContext';
 
 const HomePage = () => {
-    const [categories, setCategories] = useState([]);
+    // Dữ liệu tĩnh cho carousel banners
+    const banners = [
+        {
+            image: '/banner-4.jpg',
+        },
+        {
+            image: '/banner-1.jpg',
+        },
+        {
+            image: '/banner2.jpg',
+        }
+    ];
+
+    const [currentSlide, setCurrentSlide] = useState(0);
+
+    // Auto-play carousel
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentSlide((prev) => (prev + 1) % banners.length);
+        }, 5000); // Chuyển slide mỗi 5 giây
+
+        return () => clearInterval(timer);
+    }, [banners.length]);
+
+    // Hàm chuyển slide
+    const nextSlide = () => {
+        setCurrentSlide((prev) => (prev + 1) % banners.length);
+    };
+
+    const prevSlide = () => {
+        setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length);
+    };
+
+    const goToSlide = (index) => {
+        setCurrentSlide(index);
+    };
+
+    // Dữ liệu tĩnh cho categories
+    const categories = [
+        {
+            id: 1,
+            name: 'Giường',
+            description: 'Khám phá các mẫu giường mới nhất của chúng tôi.',
+            image: '/giuong-da.jpg'
+        },
+        {
+            id: 2,
+            name: 'Tủ quần áo',
+            description: 'Khám phá các mẫu tủ quần áo mới nhất của chúng tôi.',
+            image: '/tu-ao-diep-moc.jpg'
+        },
+        {
+            id: 3,
+            name: 'Bàn trang điểm',
+            description: 'Khám phá các mẫu bàn trang điểm mới nhất của chúng tôi.',
+            image: '/ban-trang-diem-q1.jpg'
+        },
+        {
+            id: 4,
+            name: 'Sofa',
+            description: 'Khám phá các mẫu sofa mới nhất của chúng tôi.',
+            image: '/sofa-ngoc-nga.jpg'
+        }
+    ];
+
     const [formData, setFormData] = useState({
         name: '',
         email: ''
     });
     const [errors, setErrors] = useState({});
     const { show } = useToast();
-
-	useEffect(() => {
-		const loadCategories = async () => {
-			try {
-				const response = await fetchCategories();
-				// Chỉ lấy 4 danh mục đầu tiên để hiển thị như trong file gốc
-				setCategories(response.data.slice(0, 4));
-			} catch (error) {
-				console.error("Failed to fetch categories:", error);
-			}
-		};
-		loadCategories();
-	}, []);
 
     // --- CHÚ THÍCH: Các biến variants cho animation, được giữ lại từ file gốc ---
 	const containerVariants = {
@@ -38,12 +88,12 @@ const HomePage = () => {
 
     // --- CHÚ THÍCH: Dữ liệu mẫu cho các section mới từ Homepage.js ---
     const galleryImages = [
-        `${BACKEND_URL}/upload/ban-trang-diem-q2.jpg`,
-        `${BACKEND_URL}/upload/ban-trang-diem-q3.jpg`, 
-        `${BACKEND_URL}/upload/ban-trang-diem-q4.jpg`,
-        `${BACKEND_URL}/upload/giuong-mdf.jpg`,
-        `${BACKEND_URL}/upload/giuong-nhung.jpg`,
-        `${BACKEND_URL}/upload/tu-ao-diep-nhien.jpg`
+        '/ban-trang-diem-q2.jpg',
+        '/ban-trang-diem-q3.jpg', 
+        '/ban-trang-diem-q4.jpg',
+        '/giuong-mdf.jpg',
+        '/giuong-nhung.jpg',
+        '/tu-ao-diep-nhien.jpg'
     ];
 
     // Hình ảnh cho khối "#ChiaSẻKhôngGianSống" sử dụng public
@@ -56,16 +106,7 @@ const HomePage = () => {
         '/phong-lam-viec1.jpg',
     ];
 
-    // Function để lấy hình ảnh phù hợp cho từng danh mục
-    const getCategoryImage = (categoryName) => {
-        const categoryImages = {
-            'Giường': `${BACKEND_URL}/upload/giuong-da.jpg`,
-            'Tủ quần áo': `${BACKEND_URL}/upload/tu-ao-diep-moc.jpg`,
-            'Bàn trang điểm': `${BACKEND_URL}/upload/ban-trang-diem-q1.jpg`,
-            'Sofa': `${BACKEND_URL}/upload/sofa-ngoc-nga.jpg`
-        };
-        return categoryImages[categoryName] || `${BACKEND_URL}/upload/sofa-ngoc-nga.jpg`;
-    };
+
 
     // Hàm xử lý thay đổi input
     const handleInputChange = (e) => {
@@ -159,38 +200,83 @@ const HomePage = () => {
 
 	return (
 		<div className="min-h-screen">
-			{/* 1. Hero Section */}
+			{/* 1. Hero Section with Carousel */}
 			<motion.section
-				className="relative h-screen flex items-center justify-center bg-cover bg-center"
+				className="relative h-screen flex items-center justify-center overflow-hidden"
 				initial="hidden"
 				animate="visible"
 				variants={containerVariants}
 			>
-				<div
-					className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-					style={{ backgroundImage: `url('${BACKEND_URL}/upload/sofa-ngoc-nga.jpg')` }}
-				></div>
+				{/* Carousel Images */}
+				<AnimatePresence mode="wait">
+					<motion.div
+						key={currentSlide}
+						className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+						style={{ backgroundImage: `url('${banners[currentSlide].image}')` }}
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 0.5 }}
+					></motion.div>
+				</AnimatePresence>
+				
 				<div className="absolute inset-0 bg-black bg-opacity-50"></div>
 
+				{/* Content */}
 				<div className="relative z-10 text-center text-white px-4">
-					<motion.h1 className="text-5xl md:text-7xl font-bold mb-6" variants={itemVariants}>
-						Nội thất cho thế hệ mới
-					</motion.h1>
-					<motion.p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto" variants={itemVariants}>
-						Khám phá bộ sưu tập nội thất hiện đại, tinh tế và đầy cảm hứng cho không gian sống của bạn
-					</motion.p>
-					<motion.div variants={itemVariants}>
-						{/* CHÚ THÍCH: Link đã được cập nhật */}
-						<Link to="/products">
-							<motion.button
-								className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300"
-								whileHover={{ scale: 1.05 }}
-								whileTap={{ scale: 0.95 }}
-							>
-								Xem sản phẩm
-							</motion.button>
-						</Link>
-					</motion.div>
+					<AnimatePresence mode="wait">
+						<motion.div
+							key={currentSlide}
+							initial={{ opacity: 0, y: 20 }}
+							animate={{ opacity: 1, y: 0 }}
+							exit={{ opacity: 0, y: -20 }}
+							transition={{ duration: 0.5 }}
+						>
+							<h1 className="text-5xl md:text-7xl font-bold mb-6">
+								{banners[currentSlide].title}
+							</h1>
+							<p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
+								{banners[currentSlide].description}
+							</p>
+						</motion.div>
+					</AnimatePresence>
+				</div>
+
+				{/* Navigation Buttons */}
+				<button
+					onClick={prevSlide}
+					className="absolute left-4 md:left-8 top-1/2 transform -translate-y-1/2 z-20 bg-white/30 hover:bg-white/50 text-white p-3 rounded-full transition-all duration-300 backdrop-blur-sm"
+					aria-label="Previous slide"
+				>
+					<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+					</svg>
+				</button>
+
+				<button
+					onClick={nextSlide}
+					className="absolute right-4 md:right-8 top-1/2 transform -translate-y-1/2 z-20 bg-white/30 hover:bg-white/50 text-white p-3 rounded-full transition-all duration-300 backdrop-blur-sm"
+					aria-label="Next slide"
+				>
+					<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+					</svg>
+				</button>
+
+				{/* Indicators */}
+				<div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-3">
+					{banners.map((_, index) => (
+						<button
+							key={index}
+							onClick={() => goToSlide(index)}
+							className={`w-3 h-3 rounded-full transition-all duration-300 ${
+								index === currentSlide
+									? 'bg-white w-8'
+									: 'bg-white/50 hover:bg-white/75'
+							}`}
+							aria-label={`Go to slide ${index + 1}`}
+						/>
+					))}
 				</div>
 			</motion.section>
 
@@ -205,10 +291,10 @@ const HomePage = () => {
 				<div className="container mx-auto px-4">
 					<motion.div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20" variants={itemVariants}>
 						{[
-							{ title: "Tinh tế", img: `${BACKEND_URL}/upload/ban-trang-diem-q1.jpg` },
-							{ title: "Trẻ trung", img: `${BACKEND_URL}/upload/sofa-ket-noi.jpg` },
-							{ title: "Thanh thoát", img: `${BACKEND_URL}/upload/giuong-diep-moc.jpg` },
-							{ title: "Ấm cúng", img: `${BACKEND_URL}/upload/tu-ao-diep-moc.jpg` }
+							{ title: "Tinh tế", img: '/ban-trang-diem-q1.jpg' },
+							{ title: "Trẻ trung", img: '/sofa-ket-noi.jpg' },
+							{ title: "Thanh thoát", img: '/giuong-diep-moc.jpg' },
+							{ title: "Ấm cúng", img: '/tu-ao-diep-moc.jpg' }
 						].map((item, index) => (
 							<div key={index} className="group">
 								<div className="overflow-hidden rounded-lg shadow-sm group-hover:shadow-lg transition-all duration-300 bg-white">
@@ -239,7 +325,7 @@ const HomePage = () => {
 							<div className="group">
 								<div className="overflow-hidden rounded-lg shadow-sm group-hover:shadow-lg transition-all duration-300 bg-white">
 									<img 
-										src={`${BACKEND_URL}/upload/giuong-da.jpg`} 
+										src="/giuong-da.jpg" 
 										alt="Giường Da cao cấp" 
 										className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300" 
 										loading="lazy"
@@ -249,7 +335,7 @@ const HomePage = () => {
 							<div className="group">
 								<div className="overflow-hidden rounded-lg shadow-sm group-hover:shadow-lg transition-all duration-300 bg-white mt-8">
 									<img 
-										src={`${BACKEND_URL}/upload/sofa-bed.jpg`} 
+										src="/sofa-bed.jpg" 
 										alt="Sofa Bed đa năng" 
 										className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300" 
 										loading="lazy"
@@ -285,7 +371,7 @@ const HomePage = () => {
 								>
 									<div className="relative overflow-hidden bg-white">
 										<img
-											src={getCategoryImage(category.name)}
+											src={category.image}
 											alt={category.name}
 											className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
 											loading="lazy"
@@ -298,7 +384,7 @@ const HomePage = () => {
 									<div className="p-4 flex-grow flex flex-col">
 										<h3 className="font-semibold text-gray-800 mb-2 text-lg">{category.name}</h3>
 										<p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">
-											{category.description || `Khám phá các mẫu ${category.name} mới nhất của chúng tôi.`}
+											{category.description}
 										</p>
 										<p className="text-amber-600 font-bold text-right mt-auto">Xem chi tiết &rarr;</p>
 									</div>
@@ -407,7 +493,7 @@ const HomePage = () => {
 			{/* 6. Đăng ký */}
 			<motion.section
 				className="relative py-20 bg-cover bg-center bg-no-repeat"
-				style={{ backgroundImage: `url('${BACKEND_URL}/upload/sofa-om-diu.jpg')` }}
+				style={{ backgroundImage: "url('/sofa-om-diu.jpg')" }}
 				initial="hidden"
 				whileInView="visible"
 				viewport={{ once: true, amount: 0.3 }}
