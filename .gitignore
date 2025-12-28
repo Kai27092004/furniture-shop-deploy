@@ -1,0 +1,22 @@
+# --- CẤU HÌNH CHUNG CHO CẢ DỰ ÁN ---
+# Chặn thư viện (quan trọng nhất)
+**/node_modules/
+
+# Chặn file môi trường chứa mật khẩu (BẮT BUỘC CHO BACKEND)
+.env
+**/.env
+
+# File hệ thống/IDE
+.DS_Store
+.vscode/
+.idea/
+
+# File log lỗi
+*.log
+npm-debug.log*
+
+# --- CẤU HÌNH RIÊNG CHO FRONTEND ---
+# Thư mục build của React/Vite
+frontend/dist/
+frontend/dist-ssr/
+frontend/coverage/
