@@ -2,18 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from '../context/ToastContext';
+import { TypeAnimation } from 'react-type-animation';
 
 const HomePage = () => {
     // Dữ liệu tĩnh cho carousel banners
     const banners = [
         {
-            image: '/banner-4.jpg',
-        },
-        {
             image: '/banner-1.jpg',
+			title: 'Nội thất hiện đại',
+            description: 'Kiến tạo không gian sống đẳng cấp và tinh tế'
         },
         {
-            image: '/banner2.jpg',
+            image: '/banner-2.jpg',
+			title: 'Thiết kế tối giản',
+            description: 'Vẻ đẹp đến từ sự đơn giản và tiện dụng'
+        },
+        {
+            image: '/banner-3.jpg',
+			title: 'Ấm cúng & Sang trọng',
+            description: 'Mang lại cảm giác bình yên cho tổ ấm của bạn'
         }
     ];
 
@@ -224,7 +231,7 @@ const HomePage = () => {
 
 				{/* Content */}
 				<div className="relative z-10 text-center text-white px-4">
-					<AnimatePresence mode="wait">
+					{/* <AnimatePresence mode="wait">
 						<motion.div
 							key={currentSlide}
 							initial={{ opacity: 0, y: 20 }}
@@ -238,6 +245,45 @@ const HomePage = () => {
 							<p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
 								{banners[currentSlide].description}
 							</p>
+						</motion.div>
+					</AnimatePresence> */}
+					<AnimatePresence mode="wait">
+						<motion.div
+							key={currentSlide} /* Quan trọng: Để reset hiệu ứng khi đổi slide */
+							initial={{ opacity: 0, y: 20 }}
+							animate={{ opacity: 1, y: 0 }}
+							exit={{ opacity: 0, y: -20 }}
+							transition={{ duration: 0.5 }}
+						>
+							{/* Hiệu ứng gõ chữ cho Title */}
+							<div className="mb-6 min-h-[80px]"> 
+								<TypeAnimation
+									// Lấy title từ dữ liệu banners (bạn nhớ làm Bước 1 là thêm title vào mảng banners nhé)
+									sequence={[
+										banners[currentSlide].title || 'Nội thất ShopNK', // Fallback nếu chưa có title
+										1000
+									]}
+									wrapper="h1"
+									speed={50}
+									className="text-5xl md:text-7xl font-bold"
+									repeat={1} 
+									cursor={false}
+								/>
+							</div>
+
+							<p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
+								{banners[currentSlide].description || 'Khám phá không gian sống tuyệt vời'}
+							</p>
+							
+							<Link to="/products">
+								<motion.button
+									className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300"
+									whileHover={{ scale: 1.05 }}
+									whileTap={{ scale: 0.95 }}
+								>
+									Xem sản phẩm
+								</motion.button>
+							</Link>
 						</motion.div>
 					</AnimatePresence>
 				</div>
