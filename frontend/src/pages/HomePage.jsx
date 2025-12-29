@@ -288,27 +288,6 @@ const HomePage = () => {
 					</AnimatePresence>
 				</div>
 
-				{/* Navigation Buttons */}
-				<button
-					onClick={prevSlide}
-					className="absolute left-4 md:left-8 top-1/2 transform -translate-y-1/2 z-20 bg-white/30 hover:bg-white/50 text-white p-3 rounded-full transition-all duration-300 backdrop-blur-sm"
-					aria-label="Previous slide"
-				>
-					<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-					</svg>
-				</button>
-
-				<button
-					onClick={nextSlide}
-					className="absolute right-4 md:right-8 top-1/2 transform -translate-y-1/2 z-20 bg-white/30 hover:bg-white/50 text-white p-3 rounded-full transition-all duration-300 backdrop-blur-sm"
-					aria-label="Next slide"
-				>
-					<svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-					</svg>
-				</button>
-
 				{/* Indicators */}
 				<div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-3">
 					{banners.map((_, index) => (
@@ -605,6 +584,118 @@ const HomePage = () => {
 					</motion.div>
 				</div>
 			</motion.section>
+			{/* --- SECTION 7: BEFORE & AFTER VIDEO (LIGHT THEME) --- */}
+			<section className="py-24 bg-white overflow-hidden">
+				<div className="container mx-auto px-4">
+					{/* Tiêu đề Section */}
+					<motion.div
+						initial={{ opacity: 0, y: 30 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true }}
+						className="text-center mb-16"
+					>
+						<h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+							Hành Trình <span className="text-amber-600">Lột Xác</span>
+						</h2>
+						<p className="text-gray-600 text-lg max-w-2xl mx-auto font-light">
+							Trăm nghe không bằng một thấy. Chiêm ngưỡng sự thay đổi ngoạn mục từ hiện trạng thô sơ đến không gian sống hoàn mỹ.
+						</p>
+					</motion.div>
+
+					{/* Grid Video Comparison */}
+					<div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center relative">
+						
+						{/* Icon VS ở giữa (Chỉ hiện trên Desktop) */}
+						<div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-white rounded-full items-center justify-center z-20 shadow-[0_0_30px_rgba(0,0,0,0.1)] border-4 border-amber-50">
+							<span className="font-black text-2xl italic text-amber-600">VS</span>
+						</div>
+
+						{/* VIDEO 1: BEFORE (Hiện trạng cũ) */}
+						<motion.div
+							initial={{ opacity: 0, x: -50 }}
+							whileInView={{ opacity: 1, x: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.6 }}
+							className="relative group"
+						>
+							{/* Label */}
+							<div className="absolute top-6 left-6 z-10 bg-gray-800 text-white px-5 py-2 rounded-full text-xs font-bold tracking-widest shadow-lg">
+								TRƯỚC
+							</div>
+							
+							{/* Khung Video */}
+							<div className="aspect-video bg-gray-100 rounded-3xl overflow-hidden shadow-xl border border-gray-200 group-hover:shadow-2xl transition-all duration-500">
+								<video 
+									className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-500 grayscale group-hover:grayscale-0"
+									muted
+									controls
+									playsInline
+									loop
+								>
+									<source src="/videos/video-before.mp4" type="video/mp4" />
+									Trình duyệt của bạn không hỗ trợ thẻ video.
+								</video>
+							</div>
+							
+							{/* Mô tả dưới video */}
+							<div className="mt-6 pl-4 border-l-4 border-gray-300">
+								<h3 className="text-2xl font-bold text-gray-700">Hiện trạng ban đầu</h3>
+								<p className="text-gray-500 mt-2">Không gian cũ kỹ, thiếu ánh sáng và chưa tối ưu công năng sử dụng.</p>
+							</div>
+						</motion.div>
+
+						{/* VIDEO 2: AFTER (Hoàn thiện) */}
+						<motion.div
+							initial={{ opacity: 0, x: 50 }}
+							whileInView={{ opacity: 1, x: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.6 }}
+							className="relative group"
+						>
+							{/* Label */}
+							<div className="absolute top-6 left-6 z-10 bg-amber-600 text-white px-5 py-2 rounded-full text-xs font-bold tracking-widest shadow-lg animate-pulse">
+								SAU
+							</div>
+							
+							{/* Khung Video */}
+							<div className="aspect-video bg-white rounded-3xl overflow-hidden shadow-2xl shadow-amber-100 border-2 border-amber-100 group-hover:border-amber-400 transition-all duration-500">
+								<video 
+									className="w-full h-full object-cover"
+									muted
+									autoPlay
+									loop
+									controls
+									playsInline
+								>
+									<source src="/videos/video-after.mp4" type="video/mp4" />
+									Trình duyệt của bạn không hỗ trợ thẻ video.
+								</video>
+							</div>
+							
+							{/* Mô tả dưới video */}
+							<div className="mt-6 pl-4 border-l-4 border-amber-500">
+								<h3 className="text-2xl font-bold text-amber-700">Hoàn thiện đẳng cấp</h3>
+								<p className="text-gray-600 mt-2">Diện mạo mới sang trọng, tinh tế với trọn bộ nội thất cao cấp từ ShopNK.</p>
+							</div>
+						</motion.div>
+					</div>
+					
+					{/* Nút Call to Action */}
+					<motion.div 
+						initial={{ opacity: 0, y: 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true }}
+						className="mt-20 text-center"
+					>
+						<Link to="/contact" className="group inline-flex items-center space-x-3 bg-amber-600 hover:bg-amber-700 text-white px-10 py-5 rounded-full font-bold text-lg transition-all transform hover:-translate-y-1 shadow-xl hover:shadow-amber-600/40">
+							<span>Đặt Lịch Khảo Sát Miễn Phí</span>
+							<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+							</svg>
+						</Link>
+					</motion.div>
+				</div>
+			</section>
 		</div>
 	);
 };
