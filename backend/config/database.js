@@ -10,15 +10,26 @@ const sequelize = new Sequelize(
     port: process.env.DB_PORT,
     dialect: 'mysql',
     logging: false,
-    
-    // CHỈNH SỬA ĐOẠN NÀY:
-    // Chỉ bật SSL nếu không phải môi trường development (hoặc kiểm tra biến env)
-    dialectOptions: process.env.NODE_ENV === 'production' ? {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false
-      }
-    } : {} // Nếu là dev hoặc docker local thì object rỗng (không SSL)
+
+    // Đảm bảo kết nối MySQL luôn dùng UTF-8 đầy đủ (hỗ trợ tiếng Việt, emoji, ...)
+    dialectOptions: {
+      charset: 'utf8mb4',
+      // SSL chỉ bật ở production nếu cần
+      ...(process.env.NODE_ENV === 'production'
+        ? {
+            ssl: {
+              require: true,
+              rejectUnauthorized: false,
+            },
+          }
+        : {}),
+    },
+
+    // Mặc định cho tất cả table/model tạo bằng Sequelize
+    define: {
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_unicode_ci',
+    },
   }
 );
 

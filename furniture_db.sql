@@ -1,6 +1,4 @@
--- =====================================================================
--- BƯỚC 1: THIẾT LẬP CƠ SỞ DỮ LIỆU
--- =====================================================================
+SET NAMES utf8mb4;
 
 -- Uncomment dòng dưới nếu bạn muốn xóa CSDL cũ và làm lại từ đầu
 -- DROP DATABASE IF EXISTS furniture_db; 

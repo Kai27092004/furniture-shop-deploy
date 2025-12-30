@@ -15,7 +15,8 @@ const db = require('./models'); // Import db object từ models/index.js
 // === CẤU HÌNH CORS CHO PHÉP CẢ LOCAL VÀ VERCEL ===
 const allowedOrigins = [
     'https://phatdev.vercel.app', // Domain Vercel của bạn
-    'http://localhost:5173'      // Domain khi chạy local
+    'http://localhost:5173',      // Domain khi chạy local
+    'http://localhost'            // Domain khi chạy Docker (Frontend port 80)
 ];
 
 app.use(cors({
@@ -53,13 +54,13 @@ app.use(express.static('public'));
 
 // Đồng bộ database
 // db.sequelize.sync({ force: true }) // Dùng { force: true } để xóa và tạo lại bảng, chỉ dùng trong dev
-// db.sequelize.sync()
-//     .then(() => {
-//         console.log("Synced db.");
-//     })
-//     .catch((err) => {
-//         console.log("Failed to sync db: " + err.message);
-//     });
+db.sequelize.sync()
+    .then(() => {
+        console.log("Synced db.");
+    })
+    .catch((err) => {
+        console.log("Failed to sync db: " + err.message);
+    });
 
 // Routes
 app.get('/', (req, res) => {
