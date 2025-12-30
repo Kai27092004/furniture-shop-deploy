@@ -188,11 +188,62 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    {/* Mobile Menu Button */}
-                    <div className="lg:hidden">
-                        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 text-gray-700 hover:text-[#A25F4B] hover:bg-[#A25F4B]/10 rounded-md transition-colors duration-200">
+                    {/* Mobile Right Menu (Search + Cart + Menu Button) */}
+                    <div className="lg:hidden flex items-center space-x-2">
+                        {/* Search Button */}
+                        <button 
+                            onClick={() => setIsSearchOpen(!isSearchOpen)} 
+                            className="p-2 text-gray-700 hover:text-[#A25F4B] hover:bg-[#A25F4B]/10 rounded-md transition-colors duration-200"
+                        >
+                            <FiSearch className="h-6 w-6" />
+                        </button>
+
+                        {/* Cart Button */}
+                        <Link 
+                            to="/cart" 
+                            className="relative p-2 text-gray-700 hover:text-[#A25F4B] hover:bg-[#A25F4B]/10 rounded-md transition-colors duration-200"
+                        >
+                            <FiShoppingCart className="h-6 w-6" />
+                            {cartItemCount > 0 && (
+                                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-lg">
+                                    {cartItemCount}
+                                </span>
+                            )}
+                        </Link>
+
+                        {/* Menu Button */}
+                        <button 
+                            onClick={() => setIsMenuOpen(!isMenuOpen)} 
+                            className="p-2 text-gray-700 hover:text-[#A25F4B] hover:bg-[#A25F4B]/10 rounded-md transition-colors duration-200"
+                        >
                             {isMenuOpen ? <FiX className="h-7 w-7" /> : <FiMenu className="h-7 w-7" />}
                         </button>
+                    </div>
+                </div>
+
+                {/* Mobile Search Bar (appears below header when search icon is clicked) */}
+                <div className={`lg:hidden transition-all duration-300 ease-in-out ${
+                    isSearchOpen ? 'max-h-20 opacity-100 py-3' : 'max-h-0 opacity-0 py-0'
+                } overflow-hidden bg-white border-b border-gray-200`}>
+                    <div className="px-4">
+                        <form onSubmit={handleSearch} className="flex items-center space-x-2">
+                            <div className="relative flex-1">
+                                <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Tìm kiếm sản phẩm..."
+                                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#A25F4B] focus:border-transparent"
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                className="p-2 bg-[#A25F4B] text-white rounded-md hover:bg-[#8B4A3A] transition-colors duration-200"
+                            >
+                                <FiSearch className="h-5 w-5" />
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -252,39 +303,6 @@ const Navbar = () => {
                             </Link>
                         </>
                     )}
-
-                    <NavLink to="/cart" onClick={handleMobileLinkClick} className="w-full flex items-center space-x-3 px-4 py-3 text-gray-700 hover:text-[#A25F4B] hover:bg-[#A25F4B]/5 font-medium text-base transition-all duration-200 rounded-lg group">
-                        <div className="relative">
-                            <FiShoppingCart className="h-5 w-5 group-hover:scale-110 transition-transform duration-200" />
-                            {cartItemCount > 0 && (
-                                <span className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center font-bold shadow-lg animate-bounce">
-                                    {cartItemCount}
-                                </span>
-                            )}
-                        </div>
-                        <span>Giỏ hàng</span>
-                    </NavLink>
-
-                    <div className="px-4 py-3">
-                        <form onSubmit={handleSearch} className="flex items-center space-x-2">
-                            <div className="relative flex-1">
-                                <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                                <input
-                                    type="text"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Tìm kiếm sản phẩm..."
-                                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#A25F4B] focus:border-transparent"
-                                />
-                            </div>
-                            <button
-                                type="submit"
-                                className="p-2 bg-[#A25F4B] text-white rounded-md hover:bg-[#8B4A3A] transition-colors duration-200"
-                            >
-                                <FiSearch className="h-5 w-5" />
-                            </button>
-                        </form>
-                    </div>
                 </div>
             </div>
         </nav>
