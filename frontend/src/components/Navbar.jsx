@@ -3,7 +3,7 @@ import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { fetchCategories } from '../services/api';
-import { FiShoppingCart, FiMenu, FiX, FiChevronDown, FiUser, FiLogIn } from 'react-icons/fi';
+import { FiShoppingCart, FiMenu, FiX, FiChevronDown, FiUser, FiLogIn, FiSearch } from 'react-icons/fi';
 
 const Navbar = () => {
     const { isAuthenticated, user, logout } = useAuth();
@@ -13,6 +13,8 @@ const Navbar = () => {
     const [categories, setCategories] = useState([]);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isMobileProductDropdownOpen, setIsMobileProductDropdownOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const loadCategories = async () => {
@@ -34,6 +36,16 @@ const Navbar = () => {
 
     const handleMobileLinkClick = () => {
         setIsMenuOpen(false);
+    };
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+            setSearchQuery('');
+            setIsSearchOpen(false);
+            setIsMenuOpen(false);
+        }
     };
 
     const navLinkClass = ({ isActive }) =>
@@ -138,6 +150,42 @@ const Navbar = () => {
                                 )}
                             </Link>
                         </div>
+
+                        <div className="relative ml-2 group">
+                            <button 
+                                className="block p-2.5 text-gray-700 hover:text-[#A25F4B] hover:bg-[#A25F4B]/10 rounded-full transition-all duration-200"
+                                onMouseEnter={() => setIsSearchOpen(true)}
+                            >
+                                <FiSearch className="h-6 w-6 group-hover:scale-110 transition-transform duration-200" />
+                            </button>
+                            
+                            <div 
+                                className={`absolute right-0 mt-2 transition-all duration-300 ${
+                                    isSearchOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
+                                }`}
+                                onMouseEnter={() => setIsSearchOpen(true)}
+                                onMouseLeave={() => setIsSearchOpen(false)}
+                            >
+                                <form onSubmit={handleSearch} className="bg-white rounded-lg shadow-xl p-3 border border-gray-200">
+                                    <div className="flex items-center space-x-2">
+                                        <input
+                                            type="text"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                            placeholder="Tìm kiếm sản phẩm..."
+                                            className="w-64 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#A25F4B] focus:border-transparent"
+                                            autoFocus
+                                        />
+                                        <button
+                                            type="submit"
+                                            className="p-2 bg-[#A25F4B] text-white rounded-md hover:bg-[#8B4A3A] transition-colors duration-200"
+                                        >
+                                            <FiSearch className="h-5 w-5" />
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -216,6 +264,27 @@ const Navbar = () => {
                         </div>
                         <span>Giỏ hàng</span>
                     </NavLink>
+
+                    <div className="px-4 py-3">
+                        <form onSubmit={handleSearch} className="flex items-center space-x-2">
+                            <div className="relative flex-1">
+                                <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Tìm kiếm sản phẩm..."
+                                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#A25F4B] focus:border-transparent"
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                className="p-2 bg-[#A25F4B] text-white rounded-md hover:bg-[#8B4A3A] transition-colors duration-200"
+                            >
+                                <FiSearch className="h-5 w-5" />
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </nav>

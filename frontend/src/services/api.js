@@ -32,7 +32,13 @@ export const login = (credentials) => API.post('/auth/login', credentials);
 export const register = (userData) => API.post('/auth/register', userData);
 
 // --- Products ---
-export const fetchProducts = () => API.get('/products');
+export const fetchProducts = (params = {}) => {
+    const queryParams = new URLSearchParams();
+    if (params.search) queryParams.append('search', params.search);
+    if (params.categoryId) queryParams.append('categoryId', params.categoryId);
+    const queryString = queryParams.toString();
+    return API.get(`/products${queryString ? '?' + queryString : ''}`);
+};
 export const fetchProductById = (id) => API.get(`/products/${id}`);
 export const createProduct = (productData) => API.post('/products', productData);
 export const updateProduct = (id, productData) => API.put(`/products/${id}`, productData);

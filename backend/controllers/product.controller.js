@@ -1,14 +1,25 @@
 const db = require('../models');
 const Product = db.Product;
 const Category = db.Category;
+const { Op } = require('sequelize');
 
 // Lấy tất cả sản phẩm (có thể kèm theo lọc và phân trang sau này)
 exports.getAllProducts = async (req, res) => {
-    const { categoryId } = req.query;
+    const { categoryId, search } = req.query;
     const whereCondition = {};
+    
     if (categoryId) {
         whereCondition.categoryId = categoryId;
     }
+    
+    // Thêm điều kiện tìm kiếm theo tên hoặc mô tả
+    if (search) {
+        whereCondition[Op.or] = [
+            { name: { [Op.like]: `%${search}%` } },
+            { description: { [Op.like]: `%${search}%` } }
+        ];
+    }
+    
     try {
         const products = await Product.findAll({
             where: whereCondition, // Thêm điều kiện lọc vào đây
