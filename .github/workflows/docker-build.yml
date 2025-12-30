@@ -1,0 +1,29 @@
+name: Docker Build CI
+
+# Chạy khi có code push lên nhánh main
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Tải code về máy chủ ảo của GitHub
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2. Dựng thử Backend (Xem có lỗi Dockerfile backend không)
+    - name: Build Backend Docker Image
+      run: docker build -t furniture-backend ./backend
+
+    # 3. Dựng thử Frontend (Xem có lỗi Dockerfile frontend không)
+    - name: Build Frontend Docker Image
+      run: docker build -t furniture-frontend ./frontend
+
+    # 4. Thông báo thành công
+    - name: Echo success
+      run: echo "Build thành công! Code ngon lành."
