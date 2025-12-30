@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         material: { type: DataTypes.STRING, allowNull: true },
         categoryId: { type: DataTypes.INTEGER, allowNull: true }
     }, {
-        tableName: 'products', // SỬA: chữ thường
+        tableName: 'Products',
         timestamps: true
     });
 

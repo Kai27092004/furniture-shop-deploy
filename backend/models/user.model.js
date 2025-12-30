@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: 'customer'
         }
     }, {
-        tableName: 'users', // SỬA LẠI: Dùng chữ thường để khớp với database
+        tableName: 'Users',
         timestamps: true
     });
 

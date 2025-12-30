@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         shippingAddress: { type: DataTypes.TEXT, allowNull: false },
         customerNotes: { type: DataTypes.TEXT, allowNull: true }
     }, {
-        tableName: 'orders', // SỬA: chữ thường
+        tableName: 'Orders',
         timestamps: true
     });
 

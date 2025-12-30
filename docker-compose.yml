@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # 1. Service Database (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: furniture_db
+    restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_secret
+      MYSQL_DATABASE: furniture_db
+      MYSQL_USER: furniture_user
+      MYSQL_PASSWORD: furniture_password
+    ports:
+      - "3307:3306" # Map port 3306 trong docker ra 3307 máy thật (để tránh trùng nếu máy bạn đang cài mysql)
+    volumes:
+      - db_data:/var/lib/mysql
+      # Dòng này cực quan trọng: Tự động import file SQL của bạn khi chạy lần đầu
+      - ./furniture_db.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+  # 2. Service Backend (Node.js)
+  backend:
+    build: ./backend
+    container_name: furniture_backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      # Các thông tin này phải khớp với service 'db' ở trên
+      DB_HOST: db
+      DB_USER: furniture_user
+      DB_PASSWORD: furniture_password
+      DB_NAME: furniture_db
+      DB_PORT: 3306
+      NODE_ENV: development
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  # 3. Service Frontend (Nginx + React)
+  frontend:
+    build: ./frontend
+    container_name: furniture_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+volumes:
+  db_data:
+
+networks:
+  app-network:
+    driver: bridge

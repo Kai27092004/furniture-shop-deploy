@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         }
     }, {
-        tableName: 'emailtemplates', // SỬA: chữ thường, viết liền
+        tableName: 'EmailTemplates',
         timestamps: true
     });
 

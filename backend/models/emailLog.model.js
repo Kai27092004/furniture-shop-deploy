@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: DataTypes.NOW
         }
     }, {
-        tableName: 'emaillogs', // SỬA: chữ thường, viết liền
+        tableName: 'EmailLogs',
         timestamps: false 
     });
 
