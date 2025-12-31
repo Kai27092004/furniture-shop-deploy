@@ -316,13 +316,13 @@ const HomePage = () => {
 				<div className="container mx-auto px-4">
 					<motion.div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20" variants={itemVariants}>
 						{[
-							{ title: "Tinh tế", img: '/ban-trang-diem-q1.jpg' },
-							{ title: "Trẻ trung", img: '/sofa-ket-noi.jpg' },
-							{ title: "Thanh thoát", img: '/giuong-diep-moc.jpg' },
-							{ title: "Ấm cúng", img: '/tu-ao-diep-moc.jpg' }
+							{ title: "Tinh tế", img: '/ban-trang-diem-q1.jpg', categoryId: 3 },
+							{ title: "Trẻ trung", img: '/sofa-ket-noi.jpg', categoryId: 4 },
+							{ title: "Thanh thoát", img: '/giuong-diep-moc.jpg', categoryId: 1 },
+							{ title: "Ấm cúng", img: '/tu-ao-diep-moc.jpg', categoryId: 2 }
 						].map((item, index) => (
-							<div key={index} className="group">
-								<div className="overflow-hidden rounded-lg shadow-sm group-hover:shadow-lg transition-all duration-300 bg-white">
+							<Link to={`/category/${item.categoryId}`} key={index} className="group">
+								<div className="overflow-hidden rounded-lg shadow-sm group-hover:shadow-lg transition-all duration-300 bg-white cursor-pointer">
 									<img 
 										src={item.img} 
 										alt={item.title} 
@@ -333,7 +333,7 @@ const HomePage = () => {
 								<div className="mt-4 text-center">
 									<h3 className="text-lg font-semibold text-gray-800 group-hover:text-amber-600 transition-colors duration-300">{item.title}</h3>
 								</div>
-							</div>
+							</Link>
 						))}
 					</motion.div>
 
@@ -347,8 +347,8 @@ const HomePage = () => {
 							</p>
 						</motion.div>
 						<motion.div className="grid grid-cols-2 gap-6" variants={itemVariants}>
-							<div className="group">
-								<div className="overflow-hidden rounded-lg shadow-sm group-hover:shadow-lg transition-all duration-300 bg-white">
+							<Link to="/category/1" className="group">
+								<div className="overflow-hidden rounded-lg shadow-sm group-hover:shadow-lg transition-all duration-300 bg-white cursor-pointer">
 									<img 
 										src="/giuong-da.jpg" 
 										alt="Giường Da cao cấp" 
@@ -356,9 +356,9 @@ const HomePage = () => {
 										loading="lazy"
 									/>
 								</div>
-							</div>
-							<div className="group">
-								<div className="overflow-hidden rounded-lg shadow-sm group-hover:shadow-lg transition-all duration-300 bg-white mt-8">
+							</Link>
+							<Link to="/category/4" className="group">
+								<div className="overflow-hidden rounded-lg shadow-sm group-hover:shadow-lg transition-all duration-300 bg-white mt-8 cursor-pointer">
 									<img 
 										src="/sofa-bed.jpg" 
 										alt="Sofa Bed đa năng" 
@@ -366,7 +366,7 @@ const HomePage = () => {
 										loading="lazy"
 									/>
 								</div>
-							</div>
+							</Link>
 						</motion.div>
 					</div>
 				</div>

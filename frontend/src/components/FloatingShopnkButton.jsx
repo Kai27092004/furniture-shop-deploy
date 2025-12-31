@@ -7,11 +7,10 @@ const Chatbot = React.lazy(() => import('./Chatbot'));
 const FloatingShopnkButton = ({ 
   phoneNumber = '+84 876 807 798',
   facebookUrl = 'https://www.facebook.com/nguyenthanhkai',
-  zaloQRImage = '/zalo-qr.jpg', // Đường dẫn đến ảnh QR Zalo tĩnh
+  zaloUrl = 'https://zalo.me/0876807798', // Đường dẫn Zalo để quét mã
   className = ''
 }) => {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
-  const [isZaloQROpen, setIsZaloQROpen] = useState(false);
 
   const handleChatbotClick = () => {
     setIsChatbotOpen(true);
@@ -26,19 +25,85 @@ const FloatingShopnkButton = ({
   };
 
   const handleZaloClick = () => {
-    setIsZaloQROpen(true);
+    window.open(zaloUrl, '_blank', 'noopener,noreferrer');
   };
 
   const handleChatbotClose = () => {
     setIsChatbotOpen(false);
   };
 
-  const handleZaloQRClose = () => {
-    setIsZaloQROpen(false);
-  };
-
   return (
     <>
+      <style>{`
+        @keyframes pulse-effect {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.05);
+          }
+        }
+        
+        @keyframes pulse-ring {
+          0% {
+            transform: scale(1);
+            opacity: 1;
+          }
+          100% {
+            transform: scale(1.5);
+            opacity: 0;
+          }
+        }
+        
+        .animate-pulse-effect {
+          animation: pulse-effect 2s ease-in-out infinite;
+        }
+        
+        .pulse-button {
+          position: relative;
+        }
+        
+        .pulse-button::before,
+        .pulse-button::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          pointer-events: none;
+        }
+        
+        .pulse-button::before {
+          animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        
+        .pulse-button::after {
+          animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+          animation-delay: 1s;
+        }
+        
+        .pulse-red::before,
+        .pulse-red::after {
+          border: 2px solid rgba(239, 68, 68, 0.8);
+        }
+        
+        .pulse-blue::before,
+        .pulse-blue::after {
+          border: 2px solid rgba(59, 130, 246, 0.8);
+        }
+        
+        .pulse-facebook::before,
+        .pulse-facebook::after {
+          border: 2px solid rgba(24, 119, 242, 0.8);
+        }
+        
+        .pulse-orange::before,
+        .pulse-orange::after {
+          border: 2px solid rgba(249, 115, 22, 0.8);
+        }
+      `}</style>
       {/* Floating Action Buttons */}
       <div className={`fixed bottom-24 right-6 z-40 flex flex-col gap-3 ${className}`}>
         {/* Phone Button */}
@@ -46,51 +111,41 @@ const FloatingShopnkButton = ({
           onClick={handlePhoneClick}
           aria-label={`Gọi điện thoại ${phoneNumber}`}
           className="
-            relative w-14 h-14 bg-gradient-to-r from-green-500 to-green-600 
-            hover:from-green-600 hover:to-green-700 text-white rounded-full 
-            shadow-lg hover:shadow-2xl transition-all duration-300
-            transform-gpu hover:scale-110 active:scale-95
-            focus:outline-none focus:ring-4 focus:ring-green-300 focus:ring-opacity-50
-            group overflow-hidden animate-float
+            pulse-button pulse-red
+            relative w-12 h-12 bg-red-500 
+            hover:bg-red-600 text-white rounded-full 
+            shadow-lg hover:shadow-xl transition-all duration-300
+            hover:scale-110 active:scale-95
+            focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-opacity-50
+            group overflow-visible animate-pulse-effect
           "
           title={`Gọi ${phoneNumber}`}
         >
-          {/* Animated background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-green-400 via-green-500 to-green-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          
-          {/* Shine effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 group-hover:animate-shine"></div>
-          
           {/* Icon */}
           <div className="relative z-10 flex items-center justify-center w-full h-full">
-            <Phone size={24} className="transition-transform duration-300 group-hover:scale-110" />
+            <Phone size={20} className="transition-transform duration-300 group-hover:scale-110" />
           </div>
         </button>
 
         {/* Zalo Button */}
         <button
           onClick={handleZaloClick}
-          aria-label="Mở QR Zalo"
+          aria-label="Mở Zalo để quét mã"
           className="
-            relative w-14 h-14 bg-gradient-to-r from-blue-400 to-blue-500 
-            hover:from-blue-500 hover:to-blue-600 text-white rounded-full 
-            shadow-lg hover:shadow-2xl transition-all duration-300
-            transform-gpu hover:scale-110 active:scale-95
-            focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-opacity-50
-            group overflow-hidden animate-float
+            pulse-button pulse-blue
+            relative w-12 h-12 bg-white 
+            hover:bg-gray-50 rounded-full 
+            shadow-lg hover:shadow-xl transition-all duration-300
+            hover:scale-110 active:scale-95
+            focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-opacity-50
+            group overflow-visible animate-pulse-effect
           "
-          title="Zalo"
-          style={{ animationDelay: '0.1s' }}
+          title="Zalo - Quét mã QR"
+          style={{ animationDelay: '0.3s' }}
         >
-          {/* Animated background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-300 via-blue-400 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          
-          {/* Shine effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 group-hover:animate-shine"></div>
-          
           {/* Icon - Zalo Logo */}
-          <div className="relative z-10 flex items-center justify-center w-full h-full">
-            <img src="/zalo.jpg" alt="Zalo" className="w-8 h-8 rounded-full object-cover" />
+          <div className="relative z-10 flex items-center justify-center w-full h-full p-1">
+            <img src="/zalo.jpg" alt="Zalo" className="w-full h-full rounded-full object-cover" />
           </div>
         </button>
 
@@ -99,25 +154,22 @@ const FloatingShopnkButton = ({
           onClick={handleFacebookClick}
           aria-label="Mở trang Facebook"
           className="
-            relative w-14 h-14 bg-gradient-to-r from-blue-600 to-blue-700 
-            hover:from-blue-700 hover:to-blue-800 text-white rounded-full 
-            shadow-lg hover:shadow-2xl transition-all duration-300
-            transform-gpu hover:scale-110 active:scale-95
-            focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50
-            group overflow-hidden animate-float
+            pulse-button pulse-facebook
+            relative w-12 h-12 bg-[#1877F2] 
+            hover:bg-[#0C63D4] rounded-full 
+            shadow-lg hover:shadow-xl transition-all duration-300
+            hover:scale-110 active:scale-95
+            focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-opacity-50
+            group overflow-visible animate-pulse-effect
           "
           title="Facebook"
-          style={{ animationDelay: '0.2s' }}
+          style={{ animationDelay: '0.6s' }}
         >
-          {/* Animated background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          
-          {/* Shine effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 group-hover:animate-shine"></div>
-          
-          {/* Icon */}
+          {/* Icon - Facebook Logo SVG */}
           <div className="relative z-10 flex items-center justify-center w-full h-full">
-            <Facebook size={24} className="transition-transform duration-300 group-hover:scale-110" />
+            <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 3.667h-3.533v7.98H9.101z"/>
+            </svg>
           </div>
         </button>
 
@@ -126,71 +178,32 @@ const FloatingShopnkButton = ({
           onClick={handleChatbotClick}
           aria-label="Mở chatbot AI để được hỗ trợ"
           className="
-            relative w-14 h-14 bg-gradient-to-r from-blue-500 to-blue-600 
-            hover:from-blue-600 hover:to-blue-700 text-white rounded-full 
-            shadow-lg hover:shadow-2xl transition-all duration-300
-            transform-gpu hover:scale-110 active:scale-95
-            focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50
-            group overflow-hidden animate-float
+            pulse-button pulse-orange
+            relative w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 
+            hover:from-orange-600 hover:to-orange-700 rounded-full 
+            shadow-lg hover:shadow-xl transition-all duration-300
+            hover:scale-110 active:scale-95
+            focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-opacity-50
+            group overflow-visible animate-pulse-effect
           "
           title="Chatbot AI"
-          style={{ animationDelay: '0.3s' }}
+          style={{ animationDelay: '0.9s' }}
         >
-          {/* Animated background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          
-          {/* Shine effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 group-hover:animate-shine"></div>
-          
-          {/* Icon */}
+          {/* Icon - Chatbot Robot SVG */}
           <div className="relative z-10 flex items-center justify-center w-full h-full">
-            <MessageCircle size={24} className="transition-transform duration-300 group-hover:scale-110" />
+            <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2a2 2 0 0 1 2 2v2h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3V4a2 2 0 0 1 2-2z"/>
+              <circle cx="9" cy="12" r="1"/>
+              <circle cx="15" cy="12" r="1"/>
+              <path d="M9 16h6"/>
+              <path d="M8 20v2"/>
+              <path d="M16 20v2"/>
+              <path d="M2 10h2"/>
+              <path d="M20 10h2"/>
+            </svg>
           </div>
         </button>
       </div>
-
-      {/* Zalo QR Modal */}
-      {isZaloQROpen && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4"
-          onClick={handleZaloQRClose}
-        >
-          <div 
-            className="relative bg-white rounded-xl shadow-2xl p-4 max-w-xs w-full transform transition-all"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close Button */}
-            <button
-              onClick={handleZaloQRClose}
-              className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 shadow-lg transition-all duration-200 hover:scale-110 focus:outline-none"
-              aria-label="Đóng"
-            >
-              <X size={18} />
-            </button>
-
-            {/* Title */}
-            <h3 className="text-center text-lg font-bold text-gray-800 mb-3">Kết nối qua Zalo</h3>
-
-            {/* QR Code Image */}
-            <div className="bg-white p-2 rounded-lg">
-              <img 
-                src={zaloQRImage} 
-                alt="Zalo QR Code" 
-                className="w-full h-auto rounded-lg"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="300"%3E%3Crect width="300" height="300" fill="%23f0f0f0"/%3E%3Ctext x="50%25" y="50%25" font-size="18" text-anchor="middle" dy=".3em" fill="%23999"%3EZalo QR%3C/text%3E%3C/svg%3E';
-                }}
-              />
-            </div>
-
-            {/* Footer Note */}
-            <p className="text-center text-xs text-gray-500 mt-3">
-              Quét mã để chat với chúng tôi
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* Chatbot Modal */}
       {isChatbotOpen && (
