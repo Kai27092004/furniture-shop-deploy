@@ -5,6 +5,20 @@ import { useToast } from '../context/ToastContext';
 import { TypeAnimation } from 'react-type-animation';
 
 const HomePage = () => {
+    // Detect mobile device (disable animation on mobile only)
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 1024);
+        };
+        
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     // Dữ liệu tĩnh cho carousel banners
     const banners = [
         {
@@ -220,10 +234,10 @@ const HomePage = () => {
 						key={currentSlide}
 						className="absolute inset-0 bg-cover bg-center bg-no-repeat"
 						style={{ backgroundImage: `url('${banners[currentSlide].image}')` }}
-						initial={{ opacity: 0 }}
+						initial={isMobile ? false : { opacity: 0 }}
 						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						transition={{ duration: 0.5 }}
+						exit={isMobile ? false : { opacity: 0 }}
+						transition={isMobile ? { duration: 0 } : { duration: 0.5 }}
 					></motion.div>
 				</AnimatePresence>
 				
@@ -250,10 +264,10 @@ const HomePage = () => {
 					<AnimatePresence mode="wait">
 						<motion.div
 							key={currentSlide} /* Quan trọng: Để reset hiệu ứng khi đổi slide */
-							initial={{ opacity: 0, y: 20 }}
+							initial={isMobile ? false : { opacity: 0, y: 20 }}
 							animate={{ opacity: 1, y: 0 }}
-							exit={{ opacity: 0, y: -20 }}
-							transition={{ duration: 0.5 }}
+							exit={isMobile ? false : { opacity: 0, y: -20 }}
+							transition={isMobile ? { duration: 0 } : { duration: 0.5 }}
 						>
 							{/* Hiệu ứng gõ chữ cho Title */}
 							<div className="mb-6 min-h-[80px]"> 
@@ -306,15 +320,9 @@ const HomePage = () => {
 			</motion.section>
 
 			{/* 2. Giới thiệu */}
-			<motion.section
-				className="py-20 bg-white"
-				initial="hidden"
-				whileInView="visible"
-				viewport={{ once: true, amount: 0.2 }}
-				variants={containerVariants}
-			>
+			<section className="py-20 bg-white">
 				<div className="container mx-auto px-4">
-					<motion.div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20" variants={itemVariants}>
+					<div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
 						{[
 							{ title: "Tinh tế", img: '/ban-trang-diem-q1.jpg', categoryId: 3 },
 							{ title: "Trẻ trung", img: '/sofa-ket-noi.jpg', categoryId: 4 },
@@ -335,18 +343,18 @@ const HomePage = () => {
 								</div>
 							</Link>
 						))}
-					</motion.div>
+					</div>
 
 					<div className="grid md:grid-cols-2 gap-16 items-center">
-						<motion.div variants={itemVariants}>
+						<div>
 							<h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
 								Sự tươi mới qua từng góc nhìn
 							</h2>
 							<p className="text-gray-600 leading-relaxed text-lg">
 								Chúng tôi tin rằng mỗi món đồ nội thất không chỉ là một vật dụng, mà còn là một tác phẩm nghệ thuật, mang lại nguồn cảm hứng và sự tươi mới cho không gian sống của bạn mỗi ngày.
 							</p>
-						</motion.div>
-						<motion.div className="grid grid-cols-2 gap-6" variants={itemVariants}>
+						</div>
+						<div className="grid grid-cols-2 gap-6">
 							<Link to="/category/1" className="group">
 								<div className="overflow-hidden rounded-lg shadow-sm group-hover:shadow-lg transition-all duration-300 bg-white cursor-pointer">
 									<img 
@@ -367,33 +375,23 @@ const HomePage = () => {
 									/>
 								</div>
 							</Link>
-						</motion.div>
+						</div>
 					</div>
 				</div>
-			</motion.section>
+			</section>
 
 			{/* 3. Sản phẩm bán chạy (Sử dụng dữ liệu categories từ API) */}
-			<motion.section
-				className="py-20 bg-gray-50"
-				initial="hidden"
-				whileInView="visible"
-				viewport={{ once: true, amount: 0.2 }}
-				variants={containerVariants}
-			>
+			<section className="py-20 bg-gray-50">
 				<div className="container mx-auto px-4">
-					<motion.h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12" variants={itemVariants}>
+					<h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
 						Danh Mục Bán Chạy
-					</motion.h2>
+					</h2>
 
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
 						{categories.map((category) => (
 							// CHÚ THÍCH: Link đã được cập nhật để trỏ đến trang danh mục
 							<Link to={`/category/${category.id}`} key={category.id}>
-								<motion.div
-									className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col"
-									variants={itemVariants}
-									whileHover={{ y: -5 }}
-								>
+							<div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col">
 									<div className="relative overflow-hidden bg-white">
 										<img
 											src={category.image}
@@ -413,12 +411,12 @@ const HomePage = () => {
 										</p>
 										<p className="text-amber-600 font-bold text-right mt-auto">Xem chi tiết &rarr;</p>
 									</div>
-								</motion.div>
+								</div>
 							</Link>
 						))}
 					</div>
 
-					<motion.div className="text-center" variants={itemVariants}>
+					<div className="text-center">
 						{/* CHÚ THÍCH: Link đã được cập nhật */}
 						<Link to="/products">
 							<motion.button
@@ -429,61 +427,47 @@ const HomePage = () => {
 								Xem tất cả
 							</motion.button>
 						</Link>
-					</motion.div>
+					</div>
 				</div>
-			</motion.section>
+			</section>
 
 			{/* 4. Tại sao chọn chúng tôi */}
-			<motion.section
-				className="py-20" style={{ backgroundColor: '#d19a66' }}
-				initial="hidden"
-				whileInView="visible"
-				viewport={{ once: true, amount: 0.3 }}
-				variants={containerVariants}
-			>
+			<section className="py-20" style={{ backgroundColor: '#d19a66' }}>
 				<div className="container mx-auto px-4">
-					<motion.h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-12" variants={itemVariants}>
+					<h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-12">
 						Tại sao nên chọn chúng tôi
-					</motion.h2>
+					</h2>
 					<div className="grid md:grid-cols-3 gap-8">
 						{[
 							{ title: "Mẫu mã đa dạng, độc đáo", description: "Luôn cập nhật xu hướng mới nhất, mang đến những thiết kế nội thất tinh tế và khác biệt." },
 							{ title: "Chất lượng vượt trội", description: "Sử dụng vật liệu cao cấp, quy trình sản xuất nghiêm ngặt đảm bảo độ bền cho từng sản phẩm." },
 							{ title: "Chăm sóc khách hàng tận tâm", description: "Đội ngũ tư vấn viên chuyên nghiệp, sẵn sàng hỗ trợ bạn kiến tạo không gian sống hoàn hảo." }
 						].map((item) => (
-							<motion.div key={item.title} className="text-center text-white" variants={itemVariants}>
-								<h3 className="text-xl font-bold mb-4">{item.title}</h3>
-								<p className="leading-relaxed opacity-90">{item.description}</p>
-							</motion.div>
+						<div key={item.title} className="text-center text-white">
+							<h3 className="text-xl font-bold mb-4">{item.title}</h3>
+							<p className="leading-relaxed opacity-90">{item.description}</p>
+						</div>
 						))}
 					</div>
 				</div>
-			</motion.section>
+			</section>
 
 			{/* 5. Chia sẻ không gian sống */}
-			<motion.section
-				className="py-20 bg-white"
-				initial="hidden"
-				whileInView="visible"
-				viewport={{ once: true, amount: 0.2 }}
-				variants={containerVariants}
-			>
+			<section className="py-20 bg-white">
 				<div className="container mx-auto px-4">
-					<motion.div className="text-center mb-12" variants={itemVariants}>
+					<div className="text-center mb-12">
 						<h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
 							#ChiaSẻKhôngGianSống
 						</h2>
 						<p className="text-gray-600 text-lg">
 							Khám phá những không gian sống đầy cảm hứng từ khách hàng của chúng tôi
 						</p>
-					</motion.div>
+					</div>
 					<div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8">
 						{livingSpaceImages.map((img, index) => (
-							<motion.div
-								key={index}
-								className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-all duration-300"
-								variants={itemVariants}
-								whileHover={{ scale: 1.03 }}
+						<div
+							key={index}
+							className="group overflow-hidden rounded-lg shadow-sm hover:shadow-lg transition-all duration-300"
 							>
 								<div className="relative overflow-hidden bg-white">
 									<img 
@@ -497,36 +481,32 @@ const HomePage = () => {
 										<span className="text-sm font-medium">Khám phá thêm</span>
 									</div>
 								</div>
-							</motion.div>
+							</div>
 						))}
 					</div>
-					<motion.div className="text-center" variants={itemVariants}>
+					<div className="text-center">
 						{/* CHÚ THÍCH: Link đã được cập nhật */}
 						<Link to="/contact">
 							<motion.button
 								className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300"
-								whileHover={{ scale: 1.05 }}
-								whileTap={{ scale: 0.95 }}
+								whileHover={isMobile ? undefined : { scale: 1.05 }}
+								whileTap={isMobile ? undefined : { scale: 0.95 }}
 							>
 								Liên hệ với chúng tôi
 							</motion.button>
 						</Link>
-					</motion.div>
+					</div>
 				</div>
-			</motion.section>
+			</section>
 
 			{/* 6. Đăng ký */}
-			<motion.section
+			<section
 				className="relative py-20 bg-cover bg-center bg-no-repeat"
 				style={{ backgroundImage: "url('/sofa-om-diu.jpg')" }}
-				initial="hidden"
-				whileInView="visible"
-				viewport={{ once: true, amount: 0.3 }}
-				variants={containerVariants}
 			>
 				<div className="absolute inset-0 bg-black bg-opacity-60"></div>
 				<div className="relative z-10 container mx-auto px-4">
-					<motion.div className="max-w-2xl mx-auto text-center text-white" variants={itemVariants}>
+					<div className="max-w-2xl mx-auto text-center text-white">
 						<h2 className="text-3xl md:text-4xl font-bold mb-4">Đăng ký ngay</h2>
 						<p className="text-lg mb-8 opacity-90">
 							Đăng ký để nhận thông tin về những sản phẩm mới nhất và ưu đãi đặc biệt
@@ -574,16 +554,16 @@ const HomePage = () => {
 								<motion.button
 									type="submit"
 									className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300"
-									whileHover={{ scale: 1.05 }}
-									whileTap={{ scale: 0.95 }}
+									whileHover={isMobile ? undefined : { scale: 1.05 }}
+									whileTap={isMobile ? undefined : { scale: 0.95 }}
 								>
 									Gửi
 								</motion.button>
 							</div>
 						</form>
-					</motion.div>
+					</div>
 				</div>
-			</motion.section>
+			</section>
 			{/* --- SECTION 7: BEFORE & AFTER VIDEO (LIGHT THEME) --- */}
 			<section className="py-24 bg-white overflow-hidden">
 				<div className="container mx-auto px-4">
