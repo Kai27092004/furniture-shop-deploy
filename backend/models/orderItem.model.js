@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         quantity: { type: DataTypes.INTEGER, allowNull: false },
         price: { type: DataTypes.DECIMAL(10, 2), allowNull: false }
     }, {
-        tableName: 'OrderItems',
+        tableName: 'orderitems', // SỬA: chữ thường, viết liền (khớp với Aiven)
         timestamps: false
     });
 

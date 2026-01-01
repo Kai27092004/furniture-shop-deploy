@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
         name: { type: DataTypes.STRING, allowNull: false, unique: true },
         description: { type: DataTypes.TEXT, allowNull: true }
     }, {
-        tableName: 'Categories',
+        tableName: 'categories', // SỬA LẠI: Dùng chữ thường để khớp với database
         timestamps: true
     });
 
