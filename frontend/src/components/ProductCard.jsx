@@ -82,7 +82,7 @@ const ProductCard = ({ product }) => {
             <div className="relative overflow-hidden">
                 <Link to={`/products/${product.id}`}>
                     <img 
-                        src={`${BACKEND_URL}${product.imageUrl}`} // <-- CHỈNH SỬA DÒNG NÀY
+                        src={`https://wsrv.nl/?url=${BACKEND_URL}${product.imageUrl}&w=400&h=400&fit=cover`} //Fix đường dẫn URL
                         alt={product.name}
                         className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
                     />
