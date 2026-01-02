@@ -77,7 +77,7 @@ app.use('/api/dashboard', require('./routes/dashboard.routes'));
 app.use('/api/chatbot', require('./routes/chatbot.routes'));
 app.use('/api/email', require('./routes/email.routes'));
 // Thêm các routes khác ở đây...
-require('./app/routes/payment.routes')(app);
+require('./routes/payment.routes')(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
