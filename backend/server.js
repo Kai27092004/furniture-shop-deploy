@@ -16,7 +16,8 @@ const db = require('./models'); // Import db object từ models/index.js
 const allowedOrigins = [
     'https://phatdev.vercel.app', // Domain Vercel của bạn
     'http://localhost:5173',      // Domain khi chạy local
-    'http://localhost'            // Domain khi chạy Docker (Frontend port 80)
+    'http://localhost',            // Domain khi chạy Docker (Frontend port 80)
+    'https://main.d3tqdtxbh1bkio.amplifyapp.com'  // Domain AWS Amplify của bạn
 ];
 
 app.use(cors({
