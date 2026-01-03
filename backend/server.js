@@ -17,7 +17,7 @@ const allowedOrigins = [
     'https://phatdev.vercel.app', // Domain Vercel của bạn
     'http://localhost:5173',      // Domain khi chạy local
     'http://localhost',            // Domain khi chạy Docker (Frontend port 80)
-    'https://main.d3tqdtxbh1bkio.amplifyapp.com'  // Domain AWS Amplify của bạn
+    'https://main.d3tqdtxbh1bkio.amplifyapp.com',  // Domain AWS Amplify của bạn
     'https://phatdev.id.vn',
     'https://www.phatdev.id.vn'
 ];
