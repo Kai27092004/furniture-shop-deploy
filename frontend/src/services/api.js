@@ -1,7 +1,8 @@
 import axios from 'axios';
 // export const BACKEND_URL = 'http://localhost:8080';
 // export const BACKEND_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
-export const BACKEND_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+// export const BACKEND_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+export const BACKEND_URL = import.meta.env.VITE_API_URL || "http://api.phatdev.id.vn";
 
 const API = axios.create({
     baseURL: `${BACKEND_URL}/api`,
