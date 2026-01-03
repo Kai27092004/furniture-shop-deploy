@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
+import { BACKEND_URL } from '../services/api';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -112,7 +113,7 @@ const LoginPage = () => {
                             <button
                                 type="button"
                                 onClick={() => {
-                                    window.location.href = 'http://localhost:8080/api/auth/google';
+                                    window.location.href = `${BACKEND_URL}/api/auth/google`;
                                 }}
                                 className="w-full flex items-center justify-center space-x-3 bg-white border-2 border-gray-300 text-gray-700 font-semibold py-3 px-4 rounded-xl hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400/50 focus:ring-offset-2 transform hover:scale-[1.02] transition-all duration-200"
                             >
