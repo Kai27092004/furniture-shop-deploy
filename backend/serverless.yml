@@ -1,0 +1,26 @@
+service: furniture-shop-serverless
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: nodejs18.x # Hoặc nodejs20.x tùy version bạn thích
+  region: ap-southeast-1
+  timeout: 15 # Tăng thời gian chờ lên 15 giây (mặc định 6s hơi ngắn cho DB)
+  environment:
+# --- CẤU HÌNH DATABASE THẬT ---
+    # Copy dòng DB_HOST từ file .env của bạn dán vào đây
+    DB_HOST: "furniture-db-serverless.c1u4i0wk2r5w.ap-southeast-1.rds.amazonaws.com" 
+    DB_USER: "admin"
+    DB_PASS: "TanPhat27092004" # (Thay bằng mật khẩu thật của bạn)
+    DB_NAME: "furniture_db"
+    # --- CÁC CẤU HÌNH KHÁC ---
+    JWT_SECRET: "sieu_bi_mat_khong_the_doan_ra"
+    # Frontend URL (Dùng để redirect sau khi login Google)
+    # Tạm thời điền link frontend Vercel hoặc để localhost để test
+    FRONTEND_URL: "https://phatdev.id.vn"
+
+functions:
+  api:
+    handler: lambda.handler
+    events:
+      - httpApi: '*' # Nhận tất cả các loại request (GET/POST...)

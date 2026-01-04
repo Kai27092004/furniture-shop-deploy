@@ -82,7 +82,14 @@ app.use('/api/email', require('./routes/email.routes'));
 // Thêm các routes khác ở đây...
 require('./routes/payment.routes')(app);
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Xuất biến app ra để file khác (lambda.js) có thể dùng
+module.exports = app;
+
+// Chỉ chạy lệnh listen khi file này được chạy trực tiếp (bởi Docker/Node)
+// Nếu file này được import bởi Lambda, đoạn này sẽ bị bỏ qua -> An toàn tuyệt đối
+if (require.main === module) {
+    const PORT = process.env.PORT || 8080;
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}

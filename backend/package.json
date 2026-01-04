@@ -24,7 +24,8 @@
     "openai": "^5.20.2",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "serverless-http": "^4.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
