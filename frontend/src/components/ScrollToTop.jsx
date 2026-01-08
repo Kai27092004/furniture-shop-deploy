@@ -44,7 +44,7 @@ const ScrollToTop = () => {
   return (
     <>
       {isVisible && (
-        <div className="fixed bottom-8 right-8 z-50">
+        <div className="fixed bottom-6 right-6 z-50">
           {/* Progress Circle */}
           <div className="relative">
             <svg className="w-12 h-12 transform -rotate-90">
