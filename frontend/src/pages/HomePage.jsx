@@ -222,24 +222,14 @@ const HomePage = () => {
 	return (
 		<div className="min-h-screen">
 			{/* 1. Hero Section with Carousel */}
-			<motion.section
+			<section
 				className="relative h-screen flex items-center justify-center overflow-hidden"
-				initial="hidden"
-				animate="visible"
-				variants={containerVariants}
 			>
 				{/* Carousel Images */}
-				<AnimatePresence mode="wait">
-					<motion.div
-						key={currentSlide}
-						className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-						style={{ backgroundImage: `url('${banners[currentSlide].image}')` }}
-						initial={isMobile ? false : { opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={isMobile ? false : { opacity: 0 }}
-						transition={isMobile ? { duration: 0 } : { duration: 0.5 }}
-					></motion.div>
-				</AnimatePresence>
+				<div
+					className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+					style={{ backgroundImage: `url('${banners[currentSlide].image}')` }}
+				></div>
 				
 				<div className="absolute inset-0 bg-black bg-opacity-50"></div>
 
@@ -302,6 +292,28 @@ const HomePage = () => {
 					</AnimatePresence>
 				</div>
 
+				{/* Previous Button */}
+				<button
+					onClick={prevSlide}
+					className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/30 hover:bg-white/50 text-white p-3 rounded-full transition-all duration-300 backdrop-blur-sm"
+					aria-label="Previous slide"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+					</svg>
+				</button>
+
+				{/* Next Button */}
+				<button
+					onClick={nextSlide}
+					className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/30 hover:bg-white/50 text-white p-3 rounded-full transition-all duration-300 backdrop-blur-sm"
+					aria-label="Next slide"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+					</svg>
+				</button>
+
 				{/* Indicators */}
 				<div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-3">
 					{banners.map((_, index) => (
@@ -317,7 +329,7 @@ const HomePage = () => {
 						/>
 					))}
 				</div>
-			</motion.section>
+			</section>
 
 			{/* 2. Giới thiệu */}
 			<section className="py-20 bg-white">

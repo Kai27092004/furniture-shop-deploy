@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { MessageCircle, Phone, Facebook, X } from 'lucide-react';
-
-// Lazy load Chatbot component
-const Chatbot = React.lazy(() => import('./Chatbot'));
+import { Phone, Facebook } from 'lucide-react';
 
 const FloatingShopnkButton = ({ 
   phoneNumber = '+84 876 807 798',
@@ -10,11 +7,6 @@ const FloatingShopnkButton = ({
   zaloUrl = 'https://zalo.me/0876807798', // Đường dẫn Zalo để quét mã
   className = ''
 }) => {
-  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
-
-  const handleChatbotClick = () => {
-    setIsChatbotOpen(true);
-  };
 
   const handlePhoneClick = () => {
     window.location.href = `tel:${phoneNumber}`;
@@ -26,10 +18,6 @@ const FloatingShopnkButton = ({
 
   const handleZaloClick = () => {
     window.open(zaloUrl, '_blank', 'noopener,noreferrer');
-  };
-
-  const handleChatbotClose = () => {
-    setIsChatbotOpen(false);
   };
 
   return (
@@ -172,51 +160,7 @@ const FloatingShopnkButton = ({
             </svg>
           </div>
         </button>
-
-        {/* Chatbot Button */}
-        <button
-          onClick={handleChatbotClick}
-          aria-label="Mở chatbot AI để được hỗ trợ"
-          className="
-            pulse-button pulse-orange
-            relative w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 
-            hover:from-orange-600 hover:to-orange-700 rounded-full 
-            shadow-lg hover:shadow-xl transition-all duration-300
-            hover:scale-110 active:scale-95
-            focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-opacity-50
-            group overflow-visible animate-pulse-effect
-          "
-          title="Chatbot AI"
-          style={{ animationDelay: '0.9s' }}
-        >
-          {/* Icon - Chatbot Robot SVG */}
-          <div className="relative z-10 flex items-center justify-center w-full h-full">
-            <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2a2 2 0 0 1 2 2v2h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3V4a2 2 0 0 1 2-2z"/>
-              <circle cx="9" cy="12" r="1"/>
-              <circle cx="15" cy="12" r="1"/>
-              <path d="M9 16h6"/>
-              <path d="M8 20v2"/>
-              <path d="M16 20v2"/>
-              <path d="M2 10h2"/>
-              <path d="M20 10h2"/>
-            </svg>
-          </div>
-        </button>
       </div>
-
-      {/* Chatbot Modal */}
-      {isChatbotOpen && (
-        <React.Suspense fallback={
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg p-6">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
-            </div>
-          </div>
-        }>
-          <Chatbot isOpen={isChatbotOpen} onClose={handleChatbotClose} />
-        </React.Suspense>
-      )}
     </>
   );
 };
