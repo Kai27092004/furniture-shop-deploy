@@ -14,7 +14,7 @@ USE furniture_db;
 -- =====================================================================
 
 -- Bảng `Users`: Lưu trữ thông tin người dùng
-CREATE TABLE Users (
+CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     fullName VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -30,7 +30,7 @@ CREATE TABLE Users (
 
 
 -- Bảng `Categories`: Lưu trữ danh mục sản phẩm
-CREATE TABLE Categories (
+CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
     description TEXT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE Categories (
 
 
 -- Bảng `Products`: Lưu trữ thông tin sản phẩm
-CREATE TABLE Products (
+CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE Products (
 
 
 -- Bảng `Orders`: Lưu trữ thông tin đơn hàng
-CREATE TABLE Orders (
+CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     userId INT NOT NULL,
     totalAmount DECIMAL(10, 2) NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE Orders (
 
 
 -- Bảng `OrderItems`: Bảng trung gian chi tiết đơn hàng
-CREATE TABLE OrderItems (
+CREATE TABLE orderItems (
     id INT AUTO_INCREMENT PRIMARY KEY,
     orderId INT NOT NULL,
     productId INT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE OrderItems (
 
 
 -- Bảng `EmailTemplates`: Lưu trữ các mẫu email
-CREATE TABLE IF NOT EXISTS EmailTemplates (
+CREATE TABLE IF NOT EXISTS emailtemplates (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE, 
     subject VARCHAR(500) NOT NULL, 
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS EmailTemplates (
 
 
 -- Bảng `EmailLogs`: Lưu lịch sử gửi email
-CREATE TABLE IF NOT EXISTS EmailLogs (
+CREATE TABLE IF NOT EXISTS emaillogs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     userId INT NULL, -- Người nhận (nếu là user)
     recipientEmail VARCHAR(255) NOT NULL, 
@@ -115,16 +115,16 @@ CREATE TABLE IF NOT EXISTS EmailLogs (
 -- =====================================================================
 -- BƯỚC 3: TẠO CHỈ MỤC (INDEXES) ĐỂ TỐI ƯU TRUY VẤN
 -- =====================================================================
-CREATE INDEX idx_email_logs_user ON EmailLogs(userId);
-CREATE INDEX idx_email_logs_status ON EmailLogs(status);
-CREATE INDEX idx_email_logs_sent_at ON EmailLogs(sentAt);
+CREATE INDEX idx_email_logs_user ON emaillogs(userId);
+CREATE INDEX idx_email_logs_status ON emaillogs(status);
+CREATE INDEX idx_email_logs_sent_at ON emaillogs(sentAt);
 
 -- =====================================================================
 -- BƯỚC 4: THÊM DỮ LIỆU TĨNH (SEED DATA - DML)
 -- =====================================================================
 
 -- Thêm `Users`
-INSERT INTO `Users` (`fullName`, `email`, `password`, `phone`, `address`, `role`) VALUES
+INSERT INTO `users` (`fullName`, `email`, `password`, `phone`, `address`, `role`) VALUES
 ('Quản Trị Viên', 'admin@email.com', '$2a$12$78cga50NK6qxk35cpjwlKetU9VJvTUpI0UhfinwAQdSUH/QyO3itO', '0987654321', '123 Đường Admin, Quận 1, TP.HCM', 'admin'),
 ('Nguyễn Văn An', 'nguyen.an@email.com', '$2a$12$9NpdokzqzT5hBOCKYsfUNeCraPB.qJAM/SnC1iUhNb5WU.1tyX2Aq', '0912345678', '111 Nguyễn Trãi, Quận Thanh Xuân, Hà Nội', 'customer'),
 ('Trần Thị Bích', 'tran.bich@email.com', '$2a$12$9NpdokzqzT5hBOCKYsfUNeCraPB.qJAM/SnC1iUhNb5WU.1tyX2Aq', '0923456789', '222 Lê Lợi, Quận Hải Châu, Đà Nẵng', 'customer'),
@@ -137,14 +137,14 @@ INSERT INTO `Users` (`fullName`, `email`, `password`, `phone`, `address`, `role`
 ('Phan Văn Kiên', 'phan.kien@email.com', '$2a$12$9NpdokzqzT5hBOCKYsfUNeCraPB.qJAM/SnC1iUhNb5WU.1tyX2Aq', '0901234567', '999 Quang Trung, Quận Gò Vấp, TP.HCM', 'customer');
 
 -- Thêm `Categories`
-INSERT INTO `Categories` (`id`, `name`, `description`) VALUES
+INSERT INTO `categories` (`id`, `name`, `description`) VALUES
 (1, 'Giường', 'Những mẫu giường ngủ êm ái, mang lại giấc ngủ ngon và tô điểm cho phòng ngủ.'),
 (2, 'Tủ quần áo', 'Giải pháp lưu trữ thông minh với tủ quần áo, kệ sách, kệ trang trí.'),
 (3, 'Bàn trang điểm', 'Các loại bàn trang điểm với thiết kế đa dạng.'),
 (4, 'Sofa', 'Sofa băng, sofa góc cho phòng khách thêm sang trọng và ấm cúng.');
 
 -- Thêm `Products`
-INSERT INTO `Products` (`name`, `description`, `price`, `stockQuantity`, `imageUrl`, `sku`, `dimensions`, `material`, `categoryId`) VALUES
+INSERT INTO `products` (`name`, `description`, `price`, `stockQuantity`, `imageUrl`, `sku`, `dimensions`, `material`, `categoryId`) VALUES
 ('Giường Diệp Mộc', 'Giường Diệp Mộc mang lại thiết kế dịu mắt với màu xanh nhẹ nhàng, tạo nên không gian êm ái và dễ chịu cho phòng ngủ của bạn.', 10000.00, 8, '/upload/giuong-diep-moc.jpg', 'GIUONG-MDF-001', '180cm x 200cm', 'Gỗ MDF', 1),
 ('Giường Vải Nhung', 'Giường Vải Nhung được thiết kế để mang đến sự kết hợp hoàn hảo giữa phong cách hiện đại tối giản và sự thoải mái tối đa.', 10000.00, 10, '/upload/giuong-nhung.jpg', 'GIUONG-KHUNG-GO-TU-NHIEN-002', '140cm x 200cm', 'Vải nhung, khung gỗ tự nhiên', 1),
 ('Giường Da', 'Giường da được thiết kế để mang đến sự kết hợp hoàn hảo giữa chất liệu da PU cao cấp và phong cách hiện đại, mang lại sự thoải mái và đẳng cấp cho không gian sống của bạn.', 10000.00, 5, '/upload/giuong-da.jpg', 'GIUONG-KHUNG-GO-TU-NHIEN-003', '180cm x 200cm', 'Vải da, khung gỗ tự nhiên', 1),
@@ -163,7 +163,7 @@ INSERT INTO `Products` (`name`, `description`, `price`, `stockQuantity`, `imageU
 ('Sofa Bed', 'Sở hữu thiết kế thời thượng với các đường nét tinh gọn và màu sắc trung tính, dễ dàng kết hợp với nhiều cách nội thất khác nhau.', 12500000.00, 7, '/upload/sofa-bed.jpg', 'SOFA-DA-001', '220cm x 85cm x 80cm', 'Da công nghiệp, Khung gỗ', 4);
 
 -- Thêm `EmailTemplates`
-INSERT INTO EmailTemplates (name, subject, content, description) VALUES
+INSERT INTO emailTemplates (name, subject, content, description) VALUES
 ('Chào mừng khách hàng mới', 'Chào mừng bạn đến với Furniture Shop!', 
 '<h2>Xin chào {{customerName}}!</h2>
 <p>Chúng tôi rất vui mừng chào đón bạn đến với <strong>Furniture Shop</strong> - nơi cung cấp các sản phẩm nội thất chất lượng cao.</p>
